@@ -7,17 +7,15 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
-    
     <style>
-        /* --- 1. CONFIGURACIÓN PREMIUM --- */
+        /* --- 1. CONFIGURACIÓN BASE --- */
         :root {
             --bg-deep: #050505;
             --bg-card: #0a0a0a;
             --text-white: #ffffff;
-            --text-gray: #888888;
-            --accent: #E31C2D; /* Rojo AVANCE */
-            --accent-glow: rgba(227, 28, 45, 0.5);
+            --text-gray: #999999;
+            --accent: #E31C2D;
+            --accent-glow: rgba(227, 28, 45, 0.4);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,226 +24,253 @@
             background-color: var(--bg-deep);
             color: var(--text-white);
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden; /* Lenis maneja el scroll */
-            cursor: default;
+            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* Ruido granulado para textura de cine */
-        .noise-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.05; pointer-events: none; z-index: 9999;
-        }
-
-        /* --- 2. TIPOGRAFÍA --- */
-        h1, h2, h3 { letter-spacing: -0.04em; line-height: 1.1; }
+        /* --- 2. TIPOGRAFÍA Y ESPACIADO --- */
+        h1, h2, h3 { line-height: 1.1; letter-spacing: -0.03em; }
         
-        .hero-title {
-            font-size: clamp(3.5rem, 10vw, 9rem);
-            font-weight: 900;
-            background: linear-gradient(to bottom, #fff, #666);
-            -webkit-background-clip: text;
-            color: transparent;
-            opacity: 0; /* Animación inicial */
-            transform: translateY(50px);
-        }
-
-        .section-headline {
-            font-size: clamp(2rem, 5vw, 4rem);
-            margin-bottom: 3rem;
-        }
-
-        p { color: var(--text-gray); font-size: 1.1rem; line-height: 1.6; }
-
-        /* --- 3. LAYOUT & UI --- */
         section {
-            padding: 8rem 5vw;
+            /* FORZAMOS ALTURA PARA QUE NO SE VEA CORTA */
+            min-height: 100vh; 
+            padding: 120px 5vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             position: relative;
         }
 
-        .container { max-width: 1400px; margin: 0 auto; }
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            width: 100%;
+        }
 
-        /* Botón Neón */
-        .btn-elite {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 1rem 2.5rem;
-            background: var(--accent);
-            color: white;
-            text-decoration: none;
-            border-radius: 100px;
-            font-weight: 600;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            border: 1px solid var(--accent);
+        .section-headline {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            margin-bottom: 4rem;
+            font-weight: 800;
+        }
+
+        .section-number {
+            color: var(--accent);
+            font-size: 1.2rem;
+            font-family: monospace;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* --- 3. LOGO FIX (SOLUCIÓN AL LOGO INVISIBLE) --- */
+        .logo-container {
+            /* Esto crea un resplandor blanco detrás del logo por si es negro */
             position: relative;
-            overflow: hidden;
-            z-index: 1;
+            display: inline-block;
+            margin-bottom: 2rem;
         }
-        
-        .btn-elite::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transform: translateX(-100%); transition: 0.6s; z-index: -1;
+        .logo-container::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%; height: 120%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            z-index: -1;
+            border-radius: 50%;
         }
-
-        .btn-elite:hover { 
-            box-shadow: 0 0 40px var(--accent-glow); 
-            transform: scale(1.05);
+        .logo-hero {
+            width: 150px;
+            display: block;
+            /* Filtro para asegurar contraste si el logo es oscuro */
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); 
         }
-        .btn-elite:hover::before { transform: translateX(100%); }
 
         /* --- 4. HERO SECTION --- */
         .hero {
-            height: 100vh;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
+            align-items: center;
             text-align: center;
-            position: relative;
+            padding-top: 0; /* Centrado perfecto */
         }
 
-        .logo-hero { width: 140px; margin-bottom: 2rem; opacity: 0; }
-        .hero-badge {
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 5px 15px; border-radius: 50px;
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;
-            margin-bottom: 1rem; opacity: 0;
+        .hero-title {
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 900;
+            background: linear-gradient(to bottom, #fff 30%, #444);
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 2rem;
         }
 
-        /* --- 5. MANIFIESTO (Scrollytelling) --- */
-        .manifesto-text span { opacity: 0.2; transition: opacity 0.3s; }
-        .manifesto-text span.active { opacity: 1; text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+        .btn-elite {
+            padding: 1.2rem 3rem;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            display: inline-block;
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+        .btn-elite:hover {
+            transform: scale(1.05);
+            background: #fff;
+            color: var(--accent);
+        }
 
-        /* --- 6. EQUIPO (BENTO GRID DARK) --- */
+        /* --- 5. BENTO GRID (EQUIPO) --- */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 30px;
         }
 
         .bento-card {
             background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 2.5rem;
-            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 3rem;
+            border-radius: 24px;
             transition: 0.4s;
-            position: relative;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 350px; /* Hacemos las tarjetas más altas */
         }
 
         .bento-card:hover {
             border-color: var(--accent);
+            transform: translateY(-10px);
             background: #0f0f0f;
-            transform: translateY(-5px);
         }
 
         .role-badge {
-            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;
-            color: var(--accent); border: 1px solid var(--accent);
-            padding: 4px 10px; border-radius: 5px; display: inline-block; margin-bottom: 1rem;
+            font-size: 0.8rem; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: block;
         }
         
-        .member-name { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff; }
+        .member-name { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+        .member-desc { color: var(--text-gray); font-size: 1rem; }
 
-        /* --- 7. PROPUESTAS (TABS ELITE) --- */
-        .tabs-container {
-            margin-top: 3rem;
+        /* --- 6. PROPUESTAS (ESTILO LISTA EXPANDIDA) --- */
+        .proposal-list {
+            list-style: none;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
-
-        .tabs-nav {
-            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 3rem;
-        }
-
-        .tab-btn {
-            background: transparent; border: none; color: var(--text-gray);
-            font-size: 1.2rem; font-family: 'Inter', sans-serif; font-weight: 600;
-            cursor: pointer; padding: 10px 20px; white-space: nowrap;
-            transition: 0.3s; position: relative;
-        }
-
-        .tab-btn.active { color: #fff; }
-        .tab-btn.active::after {
-            content: ''; position: absolute; bottom: -21px; left: 0; width: 100%; height: 2px;
-            background: var(--accent); box-shadow: 0 0 15px var(--accent);
-        }
-
-        .proposal-content { display: none; animation: fadeIn 0.8s ease; }
-        .proposal-content.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .proposal-item {
-            display: flex; gap: 20px; margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2rem;
-        }
-        .proposal-icon {
-            font-size: 1.5rem; color: var(--accent); min-width: 40px;
+            padding: 3rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 2rem;
+            transition: 0.3s;
         }
 
-        /* --- 8. FOOTER --- */
-        footer { padding: 5rem 5vw; text-align: center; border-top: 1px solid #222; }
+        .proposal-item:hover { background: rgba(255,255,255,0.02); padding-left: 2rem; }
 
+        .prop-title { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+        .prop-desc { font-size: 1.1rem; color: var(--text-gray); }
+        .prop-category { color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- 7. FOOTER --- */
+        footer {
+            padding: 5rem 5vw;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            min-height: 50vh; /* Footer alto */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 4rem; }
+            .section-headline { font-size: 2.5rem; }
+            .proposal-item { grid-template-columns: 1fr; gap: 0.5rem; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="noise-overlay"></div>
-
     <section class="hero">
-        <div class="hero-badge">CAICO 2026</div>
-        <img src="logo-header.png" alt="AVANCE Logo" class="logo-hero">
+        <div class="logo-container">
+            <img src="logo-header.png" 
+                 onerror="this.src='logo-header.jpg'" 
+                 alt="AVANCE Logo" 
+                 class="logo-hero">
+        </div>
+        
         <h1 class="hero-title">NO ESPERES<br>EL CAMBIO.</h1>
         <h1 class="hero-title" style="color: var(--accent); -webkit-text-fill-color: var(--accent);">SE EL AVANCE.</h1>
         
-        <div style="margin-top: 3rem; opacity: 0;" class="hero-cta">
-            <a href="#manifiesto" class="btn-elite">DESCUBRIR LA VISIÓN</a>
+        <div style="margin-top: 3rem;">
+            <a href="#manifiesto" class="btn-elite">DESCUBRE LA VISIÓN</a>
         </div>
     </section>
 
     <section id="manifiesto">
         <div class="container">
-            <p style="color: var(--accent); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px;">Nuestra Filosofía</p>
-            <h2 class="section-headline manifesto-text">
-                La universidad no es solo estudiar. Es conectar, vivir y transformar. 
-                Rompemos la inercia con propuestas reales, tecnología de punta 
-                y una gestión que entiende el futuro. Somos la evolución que esperabas.
+            <span class="section-number">01. FILOSOFÍA</span>
+            <h2 class="section-headline" style="max-width: 1000px; line-height: 1.4;">
+                La universidad no es solo estudiar.<br> 
+                <span style="color: var(--text-gray);">Es conectar. Es vivir. Es transformar.</span><br><br>
+                Vinimos a romper la inercia con propuestas reales, 
+                tecnología y gestión profesional.
             </h2>
         </div>
     </section>
 
     <section id="equipo">
         <div class="container">
-            <h2 class="section-headline">Mesa Directiva <span style="color:var(--accent)">.01</span></h2>
+            <span class="section-number">02. LIDERAZGO</span>
+            <h2 class="section-headline">Mesa Directiva</h2>
             
             <div class="bento-grid">
                 <div class="bento-card" style="border-color: var(--accent);">
-                    <span class="role-badge">Líder</span>
-                    <h3 class="member-name">Javier Adasme</h3>
-                    <p>Presidente. Curiosidad, proactividad y visión empresarial.</p>
+                    <div>
+                        <span class="role-badge">Presidente</span>
+                        <h3 class="member-name">Javier Adasme</h3>
+                    </div>
+                    <p class="member-desc">Liderazgo estratégico y visión empresarial para el CAICO.</p>
                 </div>
 
                 <div class="bento-card">
-                    <span class="role-badge">Estrategia</span>
-                    <h3 class="member-name">Renato Farías</h3>
-                    <p>Vicepresidente. Ejecución y liderazgo.</p>
+                    <div>
+                        <span class="role-badge">Vicepresidente</span>
+                        <h3 class="member-name">Renato Farías</h3>
+                    </div>
+                    <p class="member-desc">Ejecución impecable y coordinación de equipos.</p>
                 </div>
 
                 <div class="bento-card">
-                    <span class="role-badge">Gestión</span>
-                    <h3 class="member-name">Isidora Montes</h3>
-                    <p>Secretaria General. Orden y estructura.</p>
+                    <div>
+                        <span class="role-badge">Secretaria General</span>
+                        <h3 class="member-name">Isidora Montes</h3>
+                    </div>
+                    <p class="member-desc">Organización, actas y estructura interna.</p>
                 </div>
 
                 <div class="bento-card">
-                    <span class="role-badge">Recursos</span>
-                    <h3 class="member-name">Sofía Robles</h3>
-                    <p>Finanzas. Transparencia y eficiencia.</p>
+                    <div>
+                        <span class="role-badge">Finanzas</span>
+                        <h3 class="member-name">Sofía Robles</h3>
+                    </div>
+                    <p class="member-desc">Transparencia total y gestión eficiente de recursos.</p>
                 </div>
 
                 <div class="bento-card">
-                    <span class="role-badge">Voz</span>
-                    <h3 class="member-name">Iker Ibarra</h3>
-                    <p>Comunicaciones. Conexión con el estudiante.</p>
+                    <div>
+                        <span class="role-badge">Comunicaciones</span>
+                        <h3 class="member-name">Iker Ibarra</h3>
+                    </div>
+                    <p class="member-desc">La voz de los estudiantes en cada canal.</p>
                 </div>
             </div>
         </div>
@@ -253,32 +278,38 @@
 
     <section>
         <div class="container">
-            <h2 class="section-headline">Comisiones <span style="color:var(--accent)">.02</span></h2>
+            <span class="section-number">03. GESTIÓN</span>
+            <h2 class="section-headline">Comisiones</h2>
+            
             <div class="bento-grid">
                 <div class="bento-card">
                     <span class="role-badge">Deporte</span>
                     <h3 class="member-name">Benjamín Valenzuela</h3>
-                    <p>Llevando el deporte universitario al nivel competitivo.</p>
+                    <p class="member-desc">Supercopa, Torneos FAE y vida sana.</p>
                 </div>
 
                 <div class="bento-card">
                     <span class="role-badge">Bienestar</span>
                     <h3 class="member-name">Alan Valdes</h3>
-                    <p>Salud mental y calidad de vida real.</p>
+                    <p class="member-desc">Salud mental, convenios y buzón 24/7.</p>
                 </div>
 
-                <div class="bento-card" style="background: linear-gradient(45deg, #0a0a0a, #1a0505);">
-                    <span class="role-badge" style="border-color: #fff; color: #fff;">Vacante</span>
-                    <h3 class="member-name">Desarrollo Profesional</h3>
-                    <p style="margin-bottom: 1rem;">Lidera la conexión con el mundo laboral.</p>
-                    <a href="https://www.instagram.com/listaavance/" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 700;">POSTULAR &rarr;</a>
+                <div class="bento-card" style="background: linear-gradient(135deg, #1a0505 0%, #000 100%);">
+                    <div>
+                        <span class="role-badge" style="color:#fff; border-color:#fff;">Vacante</span>
+                        <h3 class="member-name">Desarrollo Profesional</h3>
+                    </div>
+                    <p class="member-desc">¿Te interesa conectar a la facu con el mundo laboral?</p>
+                    <a href="https://www.instagram.com/listaavance/" style="color:var(--accent); font-weight:700; margin-top:20px; display:block;">POSTULA AQUÍ &rarr;</a>
                 </div>
 
-                <div class="bento-card" style="background: linear-gradient(45deg, #0a0a0a, #1a0505);">
-                    <span class="role-badge" style="border-color: #fff; color: #fff;">Vacante</span>
-                    <h3 class="member-name">Género y Equidad</h3>
-                    <p style="margin-bottom: 1rem;">Construye espacios seguros.</p>
-                    <a href="https://www.instagram.com/listaavance/" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 700;">POSTULAR &rarr;</a>
+                <div class="bento-card" style="background: linear-gradient(135deg, #1a0505 0%, #000 100%);">
+                    <div>
+                        <span class="role-badge" style="color:#fff; border-color:#fff;">Vacante</span>
+                        <h3 class="member-name">Género y Equidad</h3>
+                    </div>
+                    <p class="member-desc">Construyamos juntos espacios seguros.</p>
+                    <a href="https://www.instagram.com/listaavance/" style="color:var(--accent); font-weight:700; margin-top:20px; display:block;">POSTULA AQUÍ &rarr;</a>
                 </div>
             </div>
         </div>
@@ -286,114 +317,75 @@
 
     <section id="propuestas">
         <div class="container">
-            <h2 class="section-headline">El Plan Maestro <span style="color:var(--accent)">.03</span></h2>
-            
-            <div class="tabs-container">
-                <div class="tabs-nav">
-                    <button class="tab-btn active" onclick="openTab('bienestar')">Bienestar</button>
-                    <button class="tab-btn" onclick="openTab('deportes')">Deportes</button>
-                    <button class="tab-btn" onclick="openTab('desarrollo')">Desarrollo</button>
-                </div>
+            <span class="section-number">04. PLAN DE ACCIÓN</span>
+            <h2 class="section-headline">Propuestas Clave</h2>
 
-                <div id="bienestar" class="proposal-content active">
-                    <h3 style="color: var(--accent); margin-bottom: 2rem;">Menos reuniones, más acción.</h3>
-                    
-                    <div class="proposal-item">
-                        <div class="proposal-icon">01</div>
-                        <div>
-                            <h4>Buzón Web 24/7</h4>
-                            <p>Canal digital directo. Modernizamos la escucha sin reuniones ineficientes.</p>
-                        </div>
+            <ul class="proposal-list">
+                <li class="proposal-item">
+                    <div class="prop-category">Bienestar</div>
+                    <div>
+                        <div class="prop-title">Buzón Web 24/7</div>
+                        <div class="prop-desc">Reemplazamos reuniones ineficientes por un canal digital directo para reclamos y dudas.</div>
                     </div>
-                    <div class="proposal-item">
-                        <div class="proposal-icon">02</div>
-                        <div>
-                            <h4>Conozcamos Ciudad Empresarial</h4>
-                            <p>Convenios reales de descuento y beneficios con locales del entorno.</p>
-                        </div>
+                </li>
+                <li class="proposal-item">
+                    <div class="prop-category">Bienestar</div>
+                    <div>
+                        <div class="prop-title">Conozcamos Ciudad Empresarial</div>
+                        <div class="prop-desc">Convenios reales de descuento con locales del entorno para romper la burbuja del campus.</div>
                     </div>
-                    <div class="proposal-item">
-                        <div class="proposal-icon">03</div>
-                        <div>
-                            <h4>Ciclo de Cine CAICO</h4>
-                            <p>Tardes de cine mensuales institucionalizadas en el auditorio.</p>
-                        </div>
-                    </div>
-                </div>
+                </li>
 
-                <div id="deportes" class="proposal-content">
-                    <h3 style="color: var(--accent); margin-bottom: 2rem;">Tu pasión, nuestra gestión.</h3>
-                    
-                    <div class="proposal-item">
-                        <div class="proposal-icon">01</div>
-                        <div>
-                            <h4>Supercopa (UDP vs USS)</h4>
-                            <p>Torneo inédito contra la San Sebastián. Campeones FAE clasifican directo.</p>
-                        </div>
+                <li class="proposal-item">
+                    <div class="prop-category">Deportes</div>
+                    <div>
+                        <div class="prop-title">Supercopa UDP vs USS</div>
+                        <div class="prop-desc">Torneo inédito contra la Universidad San Sebastián. Campeones FAE clasifican directo.</div>
                     </div>
-                    <div class="proposal-item">
-                        <div class="proposal-icon">02</div>
-                        <div>
-                            <h4>Torneo FAE 2.0</h4>
-                            <p>Profesionalización total: reglas claras, fixture y cobertura audiovisual.</p>
-                        </div>
+                </li>
+                <li class="proposal-item">
+                    <div class="prop-category">Deportes</div>
+                    <div>
+                        <div class="prop-title">Torneo FAE 2.0</div>
+                        <div class="prop-desc">Profesionalización total: reglas claras, fixture ordenado y cobertura audiovisual de finales.</div>
                     </div>
-                    <div class="proposal-item">
-                        <div class="proposal-icon">03</div>
-                        <div>
-                            <h4>Copa Volley Inauguración</h4>
-                            <p>Activamos la nueva cancha de voleibol desde el día uno.</p>
-                        </div>
-                    </div>
-                </div>
+                </li>
 
-                <div id="desarrollo" class="proposal-content">
-                    <h3 style="color: var(--accent); margin-bottom: 2rem;">Herramientas para hoy y mañana.</h3>
-                    
-                    <div class="proposal-item">
-                        <div class="proposal-icon">01</div>
-                        <div>
-                            <h4>Finanzas Personales</h4>
-                            <p>Taller "Educación Financiera Real": Fintual, ETFs y presupuesto personal.</p>
-                        </div>
+                <li class="proposal-item">
+                    <div class="prop-category">Desarrollo</div>
+                    <div>
+                        <div class="prop-title">Finanzas Personales</div>
+                        <div class="prop-desc">Taller "Educación Financiera Real": Fintual, ETFs y manejo de presupuesto personal.</div>
                     </div>
-                    <div class="proposal-item">
-                        <div class="proposal-icon">02</div>
-                        <div>
-                            <h4>Productividad con Notion</h4>
-                            <p>Organiza ramos y proyectos dejando atrás el papel.</p>
-                        </div>
+                </li>
+                <li class="proposal-item">
+                    <div class="prop-category">Desarrollo</div>
+                    <div>
+                        <div class="prop-title">Productividad con Notion</div>
+                        <div class="prop-desc">Taller para organizar ramos y proyectos dejando atrás el papel.</div>
                     </div>
-                    <div class="proposal-item">
-                        <div class="proposal-icon">03</div>
-                        <div>
-                            <h4>Trámites Vida Adulta (SII)</h4>
-                            <p>Taller práctico: boletas de honorarios e inicio de actividades.</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+                </li>
+            </ul>
         </div>
     </section>
 
-    <section id="participa" style="border-bottom: none;">
-        <div class="container" style="text-align: center;">
-            <h2 class="section-headline">Construyamos Juntos</h2>
-            <div style="background: #fff; padding: 10px; border-radius: 20px; max-width: 800px; margin: 0 auto;">
+    <section id="participa" style="border-bottom:none;">
+        <div class="container">
+            <h2 class="section-headline" style="text-align: center;">Tu Opinión Importa</h2>
+            <div style="background: #fff; padding: 10px; border-radius: 20px; max-width: 800px; margin: 0 auto; height: 620px;">
                 <iframe 
                     src="https://docs.google.com/forms/d/e/1FAIpQLSeYIQwPeCzFjZLGaU4pGrxD0wYfx7RMJfrG-2Jn3FB7YSgcUg/viewform?embedded=true" 
                     width="100%" height="600" style="border:0;" loading="lazy">
+                    Cargando…
                 </iframe>
             </div>
         </div>
     </section>
 
     <footer>
-        <h2 style="font-size: 5rem; font-weight: 900; color: #1a1a1a;">AVANCE</h2>
-        <p>&copy; 2026 Lista AVANCE. Ingeniería Comercial UDP.</p>
-        <br>
-        <a href="https://www.instagram.com/listaavance/" target="_blank" class="btn-elite" style="padding: 0.5rem 1.5rem; font-size: 0.9rem;">@listaavance</a>
+        <h2 style="font-size: clamp(3rem, 10vw, 8rem); font-weight: 900; color: #1a1a1a; margin-bottom: 2rem;">AVANCE</h2>
+        <p style="margin-bottom: 2rem;">&copy; 2026 Lista AVANCE. Ingeniería Comercial UDP.</p>
+        <a href="https://www.instagram.com/listaavance/" target="_blank" class="btn-elite">SÍGUENOS EN INSTAGRAM</a>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -401,67 +393,34 @@
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.19/dist/lenis.min.js"></script>
 
     <script>
-        // 1. INICIAR SMOOTH SCROLL (Lenis)
-        const lenis = new Lenis({
-            duration: 1.5,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            direction: 'vertical',
-            smooth: true
-        });
-
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
+        // 1. SMOOTH SCROLL (Sensación Premium)
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. CONFIGURAR GSAP
+        // 2. ANIMACIONES AL SCROLLEAR
         gsap.registerPlugin(ScrollTrigger);
 
-        // Animación de Entrada (Hero)
-        const tl = gsap.timeline();
-        tl.to(".logo-hero", { opacity: 1, y: 0, duration: 1 })
-          .to(".hero-badge", { opacity: 1, duration: 0.5 }, "-=0.5")
-          .to(".hero-title", { opacity: 1, y: 0, duration: 1, stagger: 0.2 }, "-=0.5")
-          .to(".hero-cta", { opacity: 1, duration: 1 }, "-=0.5");
-
-        // Animación Manifiesto (Texto que se ilumina)
-        const text = document.querySelector(".manifesto-text");
-        const words = text.innerText.split(" ");
-        text.innerHTML = "";
-        words.forEach(word => {
-            const span = document.createElement("span");
-            span.innerText = word + " ";
-            text.appendChild(span);
+        // Animar Hero
+        gsap.from(".hero-title", { 
+            y: 100, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.2 
         });
 
-        gsap.to(".manifesto-text span", {
-            scrollTrigger: {
-                trigger: "#manifiesto",
-                start: "top 80%",
-                end: "bottom 60%",
-                scrub: 1
-            },
-            opacity: 1,
-            stagger: 0.1,
-            color: "#fff"
+        // Animar Tarjetas (Aparecen flotando hacia arriba)
+        gsap.utils.toArray(".bento-card").forEach(card => {
+            gsap.from(card, {
+                y: 50, opacity: 0, duration: 1, 
+                scrollTrigger: { trigger: card, start: "top 90%" }
+            });
         });
 
-        // 3. LÓGICA DE TABS (Propuestas)
-        function openTab(tabName) {
-            // Ocultar todos los contenidos
-            const contents = document.querySelectorAll('.proposal-content');
-            contents.forEach(c => c.classList.remove('active'));
-            
-            // Desactivar botones
-            const btns = document.querySelectorAll('.tab-btn');
-            btns.forEach(b => b.classList.remove('active'));
-
-            // Activar seleccionado
-            document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
+        // Animar Lista de Propuestas
+        gsap.utils.toArray(".proposal-item").forEach(item => {
+            gsap.from(item, {
+                x: -50, opacity: 0, duration: 0.8,
+                scrollTrigger: { trigger: item, start: "top 85%" }
+            });
+        });
     </script>
 </body>
 </html>
